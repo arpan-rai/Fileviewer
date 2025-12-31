@@ -1,0 +1,28 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+<table class="table table-striped">
+    <tr>
+        <td>PDF File</td>
+        <td>
+            <a href="/home/downloadfile?path=/Files/sample pdf.pdf" class="preview-file">View File</a>
+        </td>
+    </tr>
+    <tr>
+        <td>Image File 1</td>
+        <td>
+            <a href="/home/downloadfile?path=/Files/AMS.PNG" class="preview-file">View File</a>
+        </td>
+    </tr>
+    <tr>
+        <td>Image File 2</td>
+        <td>
+            <a href="/home/downloadfile?path=/Files/testimage.jpg" class="preview-file">View File</a>
+        </td>
+    </tr>
+</table>
