@@ -106,7 +106,11 @@ public async Task<IActionResult> DownloadFile(string path, bool download = false
 
 ## 🚀 Usage
 ```
+// image link
 <a href="/home/downloadfile?path=/Files/AMS.PNG" class="preview-file">View File</a>
+
+// pdf link
+<a href="/home/downloadfile?path=/Files/sample pdf.pdf" class="preview-file">View File</a>
 ```
 ---
 ### 🧩 Future Enhancements To be implemented
