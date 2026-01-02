@@ -36,15 +36,34 @@ $('body').on('click', '.preview-file', function (e) {
 
     var url = $(this).attr('href');
 
-    setFilename(url);
+    openFile(url);
     setDownloadLink(url);
-
-    if (url.indexOf('.pdf') !== -1) {
-        openPreview(url, "pdf");
-    } else {
-        openPreview(url, "image");
-    }
 });
+function openFile(url) {
+    $.ajax({
+        url: url,
+        xhrFields: { responseType: 'blob' },
+        success: function (blob, status, xhr) {
+
+            // Get File Metadata
+            const fileName = xhr.getResponseHeader('X-File-Name');
+            const fileSize = xhr.getResponseHeader('X-File-Size');
+            const fileType = xhr.getResponseHeader('X-File-Type');
+
+            //console.log(fileName, fileSize, fileType);
+            $('#previewFilename').text(fileName);
+
+            if (fileType === 'application/pdf') {
+                openPreview(url, "pdf");
+            } else {
+                openPreview(url, "image");
+            }
+        },
+        fail: function () {
+            return 'Error Fetching Metadata';
+        }
+    });
+}
 function setFilename(url) {
     var urlArr = url.split('/');
     var filename = urlArr[urlArr.length - 1];

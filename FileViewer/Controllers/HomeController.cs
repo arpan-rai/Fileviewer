@@ -1,4 +1,4 @@
-using FileViewer.Models;
+﻿using FileViewer.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -70,6 +70,17 @@ namespace FileViewer.Controllers
                 byte[] fileBytes = await System.IO.File.ReadAllBytesAsync(fullPath);
                 return File(fileBytes, contentType, downloadFileName);
             }
+
+            // Metadata
+            Response.Headers.Add("X-File-Name", downloadFileName);
+            Response.Headers.Add("X-File-Size", System.IO.File.ReadAllBytes(fullPath).Length.ToString());
+            Response.Headers.Add("X-File-Type", contentType);
+
+            // IMPORTANT for JS access
+            Response.Headers.Add(
+                "Access-Control-Expose-Headers",
+                "X-File-Name, X-File-Size, X-File-Type, Content-Disposition"
+            );
 
             // Stream file back to client
             var stream = new FileStream(fullPath, FileMode.Open, FileAccess.Read);
