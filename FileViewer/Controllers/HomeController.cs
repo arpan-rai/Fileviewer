@@ -1,6 +1,7 @@
 ﻿using FileViewer.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Net;
 
 namespace FileViewer.Controllers
 {
@@ -34,14 +35,14 @@ namespace FileViewer.Controllers
         {
             if (string.IsNullOrWhiteSpace(path))
             {
-                return NotFound("Document file path not found.");
+                return StatusCode(404, new { message = "Document file path not found." });
             }
 
             // Ensure file path is safe
             string relativeFilePath = path.Replace('\\', '/').TrimStart('/');
             if (relativeFilePath.Contains(".."))
             {
-                return BadRequest("Invalid file path.");
+                return StatusCode(500, new { message = "Invalid file path." });
             }
 
             // Apply authorization login for file access for that user
@@ -53,14 +54,14 @@ namespace FileViewer.Controllers
 
             if (!System.IO.File.Exists(fullPath))
             {
-                return NotFound("File does not exist.");
+                return StatusCode(404, new { message = "File does not exist." });
             }
 
             string extension = Path.GetExtension(fullPath).ToLowerInvariant();
             string contentType = GetContentType(extension);
             if (string.IsNullOrEmpty(contentType))
             {
-                return BadRequest("Unsupported file format.");
+                return StatusCode(500, new { message = "Unsupported file format." });
             }
 
             string downloadFileName = "DownloadFileName"; // Filename setting

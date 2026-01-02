@@ -42,7 +42,6 @@ $('body').on('click', '.preview-file', function (e) {
 function openFile(url) {
     $.ajax({
         url: url,
-        xhrFields: { responseType: 'blob' },
         success: function (blob, status, xhr) {
 
             // Get File Metadata
@@ -59,8 +58,23 @@ function openFile(url) {
                 openPreview(url, "image");
             }
         },
-        fail: function () {
-            return 'Error Fetching Metadata';
+        error: function (xhr) {
+            // This is triggered by non-200 HTTP status codes
+            switch (xhr.status) {
+                
+                case 404:
+                    alert('Error (404): ' + JSON.parse(xhr.responseText).message);
+                    break;
+                case 400:
+                    alert('Error (400): ' + JSON.parse(xhr.responseText).message);
+                    break;
+                case 401:
+                    window.location = "/Account/Login"; // Redirect to login page
+                    break;
+                case 500:
+                    alert('Error (500): An internal server error occurred. Please try again later. Error - ' + JSON.parse(xhr.responseText).message);
+                    break;
+            }
         }
     });
 }
